@@ -1,0 +1,1 @@
+I will be using a cloud-servie provider (AWS Lambda) to provide access tokens. The authorization server’s role in this process is what I'll be using serverless architecture for: delivering authorization tokens./
