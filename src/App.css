@@ -10,12 +10,12 @@
 }
 
 body {
-  background-color: #3a4252;
-  color: #200123;
+  background-color: #918bb3;
+  color: #010c35;
 }
 
 h1 {
-  color: #5d3d3d;
+  color: #01020d;
   font-size: 45px;
 
 }
@@ -99,7 +99,7 @@ input[type="number"] {
   padding: 10px 10px 35px;
   margin-bottom: 10px;
   text-align: left;
-  border: 1px solid #034f84;
+  border: 1px solid #8c0418;
   border-radius: 4px;
   position: relative;
 

@@ -1,59 +1,74 @@
-import React, { Component } from 'react';
-import { shallow } from 'enzyme';
-// COMPONENTS //////////
-import Event from '../Event';
-// VARS and FUNCS //////////
-import { mockData } from '../mock-data';
+import React from "react";
+import { shallow } from "enzyme";
+import { mockData } from "../mock-data";
+import Event from "../Event";
 
-describe('<Event /> component', () => {
-
-    let EventWrapper, event;
+describe("<Event /> component", () => {
+    let EventWrapper;
+    const event = mockData[0];
     beforeAll(() => {
-        event = mockData[0];
-        EventWrapper = shallow(<Event event={event} />)
+        EventWrapper = shallow(<Event event={event} />);
     });
 
-    test('<Event /> is rendered', () => {
+    test("renders the  component", () => {
         expect(EventWrapper).toBeDefined();
     });
 
-    test('<Event /> summary (h2) is rendered correctly', () => {
-        const summary = EventWrapper.find('h2.summary');
-        const summaryString = event.summary;
-        expect(summary).toBeDefined();
-        expect(summary.text()).toBe(summaryString);
+    test("renders the summary as h1", () => {
+        const summary = EventWrapper.find("h1.summary");
+        expect(summary).toHaveLength(1);
+        expect(summary.text()).toBe(event.summary);
     });
 
-    test('<Event /> start time is rendered correctly', () => {
-        const eventStart = EventWrapper.find('p.start');
-        const dateString = event.start.dateTime;
-        expect(eventStart).toBeDefined();
-        expect(eventStart.text()).toBe(dateString);
+    test("renders the start details", () => {
+        const eventStart = EventWrapper.find("p.event-start");
+        expect(eventStart).toHaveLength(1);
+        expect(eventStart.text()).toBe(new Date(event.start.dateTime).toString());
     });
 
-    test('<Event /> location is rendered correctly', () => {
-        const eventLocation = EventWrapper.find('p.location');
-        const locationString = event.location;
-        expect(eventLocation).toBeDefined();
-        expect(eventLocation.text()).toBe(`Location: ${locationString}`);
+    test("renders location details", () => {
+        const eventLocation = EventWrapper.find("p.event-location");
+        expect(eventLocation).toHaveLength(1);
+        expect(eventLocation.text()).toBe(`@${event.summary} | ${event.location}`);
     });
 
-    test('<Event /> details is initially collapsed, children hidden, details-button text is "show details"', () => {
-        const detailsButton = EventWrapper.find('button.details-button');
-        expect(EventWrapper.state('collapsed')).toBe(true);
-        expect(detailsButton).toBeDefined();
-        expect(detailsButton.text()).toBe('show details');
-        expect(EventWrapper.find('h3.about')).toHaveLength(0);
-        expect(EventWrapper.find('a.link')).toHaveLength(0);
-        expect(EventWrapper.find('p.description')).toHaveLength(0);
+    test("renders button show details, when details collapsed", () => {
+        const detailsButton = EventWrapper.find("button.details-button");
+        expect(detailsButton).toHaveLength(1);
+        expect(detailsButton.text()).toBe("show details");
     });
 
-    test('<Event /> details is expanded (collapsed=false) on click', () => {
-        const detailsButton = EventWrapper.find('button.details-button');
-        detailsButton.simulate('click');
-        expect(EventWrapper.find('h3.about')).toHaveLength(1);
-        expect(EventWrapper.find('a.link')).toHaveLength(1);
-        expect(EventWrapper.find('p.description')).toHaveLength(1);
-        expect(EventWrapper.state('collapsed')).toBe(false);
-    })
+    test("renders collapsed state as default", () => {
+        expect(EventWrapper.state("collapsed")).toBe(true);
+    });
+
+    test("expand details, when clicking show details", () => {
+        const detailsButton = EventWrapper.find("button.details-button");
+        expect(detailsButton.text()).toBe("show details");
+        expect(EventWrapper.find("h2.about")).toHaveLength(0);
+        expect(EventWrapper.find("a.link")).toHaveLength(0);
+        expect(EventWrapper.find("p.description")).toHaveLength(0);
+        detailsButton.simulate("click");
+        expect(EventWrapper.state("collapsed")).toBe(false);
+    });
+
+    test("collapse details, when clicking hide details", () => {
+        EventWrapper.setState({ collapsed: false });
+        const detailsButton = EventWrapper.find("button.details-button");
+        const aboutHeader = EventWrapper.find("h2.about");
+        const link = EventWrapper.find("a.link");
+        const description = EventWrapper.find("p.description");
+
+        expect(detailsButton.text()).toBe("hide details");
+        expect(aboutHeader).toHaveLength(1);
+        expect(aboutHeader.text()).toBe("About event:");
+        expect(link).toHaveLength(1);
+        expect(link.text()).toBe("See details on Google Calendar");
+        expect(link.prop("href")).toBe(event.htmlLink);
+        expect(description).toHaveLength(1);
+        expect(description.text()).toBe(event.description);
+
+        detailsButton.simulate("click");
+        expect(EventWrapper.state("collapsed")).toBe(true);
+    });
 });

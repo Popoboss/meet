@@ -1,9 +1,10 @@
-import React from 'react';
-import App from '../App';
-import { mockData } from '../mock-data';
-import { loadFeature, defineFeature } from 'jest-cucumber';
-import { mount, shallow } from 'enzyme';
-import CitySearch from '../CitySearch';
+import React from "react";
+import { mount, shallow } from "enzyme";
+import App from "../App";
+import { mockData } from "../mock-data";
+import { loadFeature, defineFeature } from "jest-cucumber";
+import CitySearch from "../CitySearch";
+import { extractLocations } from "../api";
 
 const feature = loadFeature('./src/features/filterEventsByCity.feature');
 
@@ -13,28 +14,26 @@ defineFeature(feature, test => {
 
         });
 
-
-
         let AppWrapper;
         when('the user opens the app', () => {
             AppWrapper = mount(<App />);
+
         });
-
-
 
         then('the user should see the list of upcoming events.', () => {
             AppWrapper.update();
-            expect(AppWrapper.find('.event')).toHaveLength(mockData.length); //why is this happening? Lesson says test should pass
+            expect(AppWrapper.find('.event')).toHaveLength(mockData.length); //need to figure out why this is giving me an
         });
     });
 
     test('User should see a list of suggestions when they search for a city', ({ given, when, then }) => {
         let CitySearchWrapper;
+        let locations = extractLocations(mockData);
         given('the main page is open', () => {
-            CitySearchWrapper = shallow(<CitySearch updateEvents={() => { }} locations={locations} />);
+            CitySearchWrapper = shallow(<CitySearch updateEvents={() => { }} locations={locations} />)
         });
 
-        when('user starts typing in the city textbox', () => {
+        when('the user starts typing in the city textbox', () => {
             CitySearchWrapper.find('.city').simulate('change', { target: { value: 'Berlin' } });
         });
 
@@ -64,6 +63,7 @@ defineFeature(feature, test => {
             const CitySearchWrapper = AppWrapper.find(CitySearch);
             expect(CitySearchWrapper.state('query')).toBe('Berlin, Germany');
         });
+
         and('the user should receive a list of upcoming events in that city', () => {
             expect(AppWrapper.find('.event')).toHaveLength(mockData.length);
         });
