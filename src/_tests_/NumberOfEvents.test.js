@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { shallow } from 'enzyme';
-// COMPONTENTS //////////
+// COMPONTENTS ///
 import App from '../App';
 import NumberOfEvents from '../NumberOfEvents';
 
