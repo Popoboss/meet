@@ -12,12 +12,6 @@ class Alert extends Component {
             fontStyle: 'italic',
             fontSize: '20px',
 
-
-
-
-
-
-
         };
     }
 

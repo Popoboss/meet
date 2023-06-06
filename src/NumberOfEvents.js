@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { ErrorAlert } from './Alert';
 
 class NumberOfEvents extends Component {
     state = {
@@ -7,15 +7,7 @@ class NumberOfEvents extends Component {
         errorText: ''
     }
 
-    // componentDidMount() {
-    //     this.setState({ noe: this.props.noe || 32 });
-    // }
-
-    // changeNOE(value) {
-    //     this.setState({ noe: value })
-    // }
-
-    handleInputChanged = (event, props) => {
+    handleInputChanged = (event) => {
         const inputValue = event.target.value;
         if (inputValue < 0 || inputValue > 32) {
             this.setState({
@@ -34,6 +26,7 @@ class NumberOfEvents extends Component {
         const { noe } = this.state;
         return (
             <div className="NumberOfEvents">
+                <ErrorAlert text={this.state.errorText} />
                 <h3>Number of Events:</h3>
                 <input
                     className="noe-input"
