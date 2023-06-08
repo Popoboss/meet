@@ -4,7 +4,7 @@ import { mockData } from "../mock-data";
 describe("show/hide an event details", () => {
     let browser;
     let page;
-    jest.setTimeout(40000);
+    jest.setTimeout(30000);
     beforeAll(async () => {
         browser = await puppeteer.launch({
             headless: false,
